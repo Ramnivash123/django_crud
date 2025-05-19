@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import User, State, City
 from django.utils.safestring import mark_safe
 import json
+import re
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -10,15 +12,27 @@ def index(request):
 def adduser(request):
     states = list(State.objects.values())
     cities = list(City.objects.values())
+
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         gender = request.POST.get('gender')
-        
         state = request.POST.get('state')
         city = request.POST.get('city')
-        User.objects.create(
+
+        # Regex patterns
+        email_pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        phone_pattern = r'^[6-9]\d{9}$'  # Indian mobile format
+
+        # Validation
+        if not re.match(email_pattern, email):
+            messages.error(request, "Invalid email format.")
+        elif not re.match(phone_pattern, phone):
+            messages.error(request, "Invalid phone number. It should start with 6-9 and be 10 digits.")
+        else:
+            # If valid, save the user
+            User.objects.create(
                 name=name,
                 email=email,
                 phone=phone,
@@ -26,6 +40,7 @@ def adduser(request):
                 state=state,
                 city=city
             )
+            messages.success(request, "User added successfully!")
 
     return render(request, 'adduser.html', {
         'states_json': states,
