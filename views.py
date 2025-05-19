@@ -69,8 +69,8 @@ def addcity(request):
     return render(request, 'addcity.html', {'states': states})
 
 def userinfo(request):
-    users = list(User.objects.values())
-    return render(request, 'userinfo.html', {'users_json': users})  # Remove json.dumps
+    users = User.objects.select_related('state', 'city').all()
+    return render(request, 'userinfo.html', {'users': users})
 
 def stateinfo(request):
     states = list(State.objects.values())
