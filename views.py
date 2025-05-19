@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import User, State, City
 from django.utils.safestring import mark_safe
 import json
@@ -64,3 +64,32 @@ def stateinfo(request):
 def cityinfo(request):
     cities = list(City.objects.select_related('state').values('id', 'name', 'state_id_id'))
     return render(request, 'cityinfo.html', {'cities_json': (cities)})
+
+
+def updateuser(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    states = list(State.objects.values())
+    cities = list(City.objects.values())
+
+    if request.method == 'POST':
+        user.name = request.POST.get('name')
+        user.email = request.POST.get('email')
+        user.phone = request.POST.get('phone')
+        user.gender = request.POST.get('gender')
+        user.state = request.POST.get('state')
+        user.city = request.POST.get('city')
+        user.save()
+        return redirect('/userinfo/')  # Replace with your success redirect page
+
+    return render(request, 'updateuser.html', {
+        'user': user,
+        'states_json': states,
+        'cities_json': cities
+    })
+
+def deleteuser(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('/userinfo/')  # Replace with your actual redirect URL name
+    
