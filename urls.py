@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from user.views import adduser, index, userinfo, addstate, addcity, userinfo, stateinfo, cityinfo
+from user.views import adduser, index, userinfo, addstate, addcity, userinfo, stateinfo, cityinfo, updateuser, deleteuser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,6 @@ urlpatterns = [
     path('userinfo/', userinfo),  # Use your view here
     path('stateinfo/', stateinfo),  # Use your view here
     path('cityinfo/', cityinfo),  # Use your view here
+    path('updateuser.html/<int:user_id>/', updateuser),
+    path('deleteuser.html/<int:user_id>/', deleteuser)
 ]
