@@ -19,12 +19,12 @@
   <main class="container mx-auto p-6">
     <a href='/index4/'>Age Calculator</a>
     
-    <form method="get" onsubmit="return validateInput()" class="space-y-4">
+    <form method="get" onsubmit="return validateInput()" class="space-y-2">
       <div class="flex items-center space-x-2">
         <label class="font-medium whitespace-nowrap">Enter Number:</label>
         <input 
           id="inp"
-          type="number" 
+          type="text" 
           name="num" 
           value="{{ num }}"  
           class="border rounded w-24 p-1 text-sm"  
@@ -34,17 +34,17 @@
           "
         >
         <button type="submit" class="bg-blue-500 text-white px-2 rounded whitespace-nowrap">Convert</button>
-        <!-- Error Box -->
-        <div 
-          id="errorBox" 
-          class="hidden border border-red-500 bg-red-100 text-red-700 px-3 py-2 rounded text-sm mt-2"
-        >
-          ❌ No input given
-        </div>
       </div>
 
-      
+      <!-- Error messages displayed below input group -->
+      <div id="errorBox" class="hidden border border-red-500 bg-red-100 text-red-700 px-3 py-2 rounded text-sm">
+        ❌ No input given
+      </div>
+      <div id="errorBox2" class="hidden border border-red-500 bg-red-100 text-red-700 px-3 py-2 rounded text-sm">
+        ❌ Wrong Format
+      </div>
     </form>
+
 
 
     {% if result %}
@@ -55,20 +55,35 @@
     {% endif %}
   </main>
 
-  <script>
-    function validateInput() {
-      const input = document.getElementById('inp');
-      const errorBox = document.getElementById('errorBox');
-
-      if (input.value.trim() === '' || isNaN(input.value)) {
-        errorBox.classList.remove('hidden');
-        return false;
-      } else {
-        errorBox.classList.add('hidden');
-        return true;
-      }
-    }
-  </script>
-
 </body>
 </html>
+
+<script>
+  function validateInput() {
+    const input = document.getElementById('inp');
+    const errorBox = document.getElementById('errorBox');
+    const errorBox2 = document.getElementById('errorBox2');
+
+    const trimmedValue = input.value.trim();
+    const numberValue = Number(trimmedValue);
+
+    let valid = true;
+
+    if (trimmedValue === '' || isNaN(numberValue)) {
+      errorBox.classList.remove('hidden');
+      valid = false;
+    } else {
+      errorBox.classList.add('hidden');
+    }
+
+    if (!Number.isInteger(numberValue)) {
+      errorBox2.classList.remove('hidden');
+      valid = false;
+    } else {
+      errorBox2.classList.add('hidden');
+    }
+
+    return valid;
+  }
+
+</script>
