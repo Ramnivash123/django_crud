@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multiplication</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Number to word</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans">
@@ -11,45 +11,64 @@
   <!-- Header -->
   <header class="bg-blue-600 text-white p-4 shadow">
     <div class="container mx-auto">
-      <h1 class="text-2xl font-bold">Multiplication</h1>
+      <h1 class="text-2xl font-bold">Number To Word Convertor</h1>
     </div>
   </header>
 
   <!-- Main Content -->
   <main class="container mx-auto p-6">
-    <a href='/index2/'>Ascii Values</a>
-    <form method="get" class="space-y-4">
-      <div>
-        <label class="block font-medium">Enter rows:</label>
-        <input type="number" name="i" class="border rounded w-full p-2" required>
+    <a href='/index4/'>Age Calculator</a>
+    
+    <form method="get" onsubmit="return validateInput()" class="space-y-4">
+      <div class="flex items-center space-x-2">
+        <label class="font-medium whitespace-nowrap">Enter Number:</label>
+        <input 
+          id="inp"
+          type="number" 
+          name="num" 
+          value="{{ num }}"  
+          class="border rounded w-24 p-1 text-sm"  
+          oninput="
+            if (this.value.length > 5) this.value = this.value.slice(0, 5);
+            if (this.value < 0) this.value = 0;
+          "
+        >
+        <button type="submit" class="bg-blue-500 text-white px-2 rounded whitespace-nowrap">Convert</button>
+        <!-- Error Box -->
+        <div 
+          id="errorBox" 
+          class="hidden border border-red-500 bg-red-100 text-red-700 px-3 py-2 rounded text-sm mt-2"
+        >
+          ❌ No input given
+        </div>
       </div>
-      <div>
-        <label class="block font-medium">Enter columns:</label>
-        <input type="number" name="j" class="border rounded w-full p-2" required>
-      </div>
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Generate</button>
+
+      
     </form>
+
 
     {% if result %}
     <div class="mt-6 max-w-md mx-auto bg-white p-4 rounded shadow">
-        <h2 class="text-xl font-bold mb-4">Multiplication Table</h2>
-        <table class="min-w-full table-auto border border-gray-300">
-            <tbody>
-                {% for row in result %}
-                <tr>
-                    {% for item in row %}
-                    <td class="border border-gray-300 px-3 py-2 text-sm text-center bg-gray-100">{{ item }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      <h2 class="text-xl font-bold mb-4">Number to word conversion</h2>
+      <p class="border border-gray-300 px-3 py-2 text-sm text-center bg-gray-100">{{ result }}</p>
     </div>
     {% endif %}
-
   </main>
 
-  
+  <script>
+    function validateInput() {
+      const input = document.getElementById('inp');
+      const errorBox = document.getElementById('errorBox');
+
+      if (input.value.trim() === '' || isNaN(input.value)) {
+        errorBox.classList.remove('hidden');
+        return false;
+      } else {
+        errorBox.classList.add('hidden');
+        return true;
+      }
+    }
+  </script>
 
 </body>
 </html>
